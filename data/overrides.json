@@ -1,0 +1,12 @@
+{
+  "_comment": "자동 분류를 손으로 바로잡는 파일. build-index.mjs 가 마지막에 덮어쓴다. useCases 를 주면 용도를 통째로 교체하고, addUseCases / removeUseCases 는 가감만 한다. note 는 카드에 표시된다.",
+  "Noto Sans KR": {
+    "note": "한글 본문의 사실상 표준. 9종 굵기 가변폰트라 대부분의 앱은 이것만으로 끝난다."
+  },
+  "Black Han Sans": {
+    "note": "한글 게임·예능 타이틀에 가장 많이 쓰이는 폰트. 굵기는 1종뿐이다."
+  },
+  "Nanum Gothic Coding": {
+    "note": "구글 한글 폰트 중 유일한 고정폭. 숫자·코드 UI 용."
+  }
+}
