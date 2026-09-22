@@ -1,0 +1,55 @@
+@import 'tailwindcss';
+
+:root {
+  --bg: #fbfbfa;
+  --surface: #ffffff;
+  --border: #e6e4e0;
+  --text: #1a1a18;
+  --muted: #6f6c66;
+  --accent: #2f6f4e;
+  --accent-soft: #e8f1eb;
+}
+
+:root[data-theme='dark'] {
+  --bg: #16161a;
+  --surface: #1e1e23;
+  --border: #32323a;
+  --text: #f0efec;
+  --muted: #9a978f;
+  --accent: #6ec49a;
+  --accent-soft: #23342c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #16161a;
+    --surface: #1e1e23;
+    --border: #32323a;
+    --text: #f0efec;
+    --muted: #9a978f;
+    --accent: #6ec49a;
+    --accent-soft: #23342c;
+  }
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 폰트가 아직 안 온 카드가 레이아웃을 흔들지 않게 자리를 잡아둔다. */
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.6; }
+}
+.skeleton {
+  animation: pulse-soft 1.4s ease-in-out infinite;
+  background: var(--border);
+  border-radius: 4px;
+}

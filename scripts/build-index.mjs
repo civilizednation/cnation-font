@@ -21,7 +21,7 @@ const OUT = resolve(ROOT, 'data/fonts.json');
 const KOREAN_ONLY = !process.argv.includes('--all');
 
 // 카드에 기본으로 렌더할 문장. 한글 폰트는 한글 샘플을, 영문 폰트는 팬그램을 쓴다.
-const SAMPLE_KO = '다람쥐 헌 쳇바퀴에 타고파';
+const SAMPLE_KO = '한글 폰트 고르기';
 const SAMPLE_EN = 'Handgloves 123';
 
 function normalizeCategory(raw) {

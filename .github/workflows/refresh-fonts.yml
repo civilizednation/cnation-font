@@ -1,0 +1,56 @@
+name: 폰트 인덱스 갱신
+
+# 구글이 폰트를 추가하거나 굵기를 늘리면 data/fonts.json 이 뒤처진다.
+# 매달 한 번 다시 만들어 변경이 있을 때만 PR 을 연다.
+on:
+  schedule:
+    - cron: '0 3 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: 인덱스 재생성
+        run: node scripts/build-index.mjs
+
+      - name: 변경 확인
+        id: diff
+        run: |
+          # generatedAt 만 바뀐 경우는 갱신으로 치지 않는다.
+          if git diff --quiet -- data/fonts.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            before=$(git show HEAD:data/fonts.json | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{const j=JSON.parse(s);delete j.generatedAt;console.log(JSON.stringify(j).length+" "+j.count)})')
+            after=$(node -e 'const j=require("./data/fonts.json");delete j.generatedAt;console.log(JSON.stringify(j).length+" "+j.count)')
+            if [ "$before" = "$after" ]; then
+              echo "changed=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "changed=true" >> "$GITHUB_OUTPUT"
+              echo "summary=$before → $after (JSON 길이, 폰트 수)" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+
+      - name: PR 열기
+        if: steps.diff.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: chore/refresh-fonts
+          title: '폰트 인덱스 갱신'
+          body: |
+            구글 폰트 메타데이터와 큐레이션 태그를 다시 읽어 `data/fonts.json` 을 갱신했다.
+
+            ${{ steps.diff.outputs.summary }}
+
+            분류가 어색한 폰트가 있으면 `data/overrides.json` 에서 손으로 바로잡는다.
+          commit-message: '폰트 인덱스 갱신'
+          add-paths: data/fonts.json
